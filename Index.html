@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Game Click Pro</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: radial-gradient(circle, #0f0f1a, #000);
+    color: #00ffff;
+    text-align: center;
+}
+
+h1 {
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.box {
+    margin: 30px auto;
+    width: 300px;
+    padding: 20px;
+    background: #111;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffff;
+}
+
+button {
+    padding: 15px;
+    margin: 5px;
+    background: black;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00ffff;
+    color: black;
+}
+
+.fall {
+    animation: fall 2s linear infinite;
+}
+
+@keyframes fall {
+    0% {transform: translateY(-50px);}
+    100% {transform: translateY(200px);}
+}
+</style>
+</head>
+
+<body>
+
+<h1>⚡ GAME  CUA TMQ</h1>
+
+<div class="box">
+    <p>⏱️ <span id="time">0</span>s</p>
+    <p>🔥 <span id="score">0</span></p>
+
+    <button onclick="startGame(6,36)">6s - 36 lần</button>
+    <button onclick="startGame(10,67)">10s - 67 lần</button>
+    <br><br>
+    <button onclick="clickGame()">ANVAODAY!!</button>
+</div>
+
+<div id="resultScreen"></div>
+<!-- 🎵 Nhạc nền -->
+<audio id="bgm" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<script>
+let score = 0;
+let time = 0;
+let target = 0;
+let playing = false;
+let started = false;
+let timer;
+
+function startGame(t, tg) {
+    score = 0;
+    time = t;
+    target = tg;
+    playing = true;
+    started = false;
+
+    document.getElementById("score").innerText = 0;
+    document.getElementById("time").innerText = time;
+    document.getElementById("resultScreen").innerHTML = "";
+}
+
+function clickGame() {
+    if (!playing) return;
+
+    // bật nhạc
+    document.getElementById("bgm").play();
+
+    if (!started) {
+        started = true;
+
+        timer = setInterval(() => {
+            time--;
+            document.getElementById("time").innerText = time;
+
+            if (time == 0) {
+                clearInterval(timer);
+                playing = false;
+                endGame();
+            }
+        }, 1000);
+    }
+
+    score++;
+    document.getElementById("score").innerText = score;
+}
+
+function endGame() {
+    let result = document.getElementById("resultScreen");
+
+    if (score >= target) {
+        let winSound = new Audio("https://www.myinstants.com/media/sounds/victory.mp3");
+        winSound.play();
+
+        result.innerHTML = `
+        <h2>🏆 VICTORY</h2>
+        <img src="cat.jpg" width="200">
+        <p class="fall">ngau roi day</p>
+        `;
+    } else {
+        let loseSound = new Audio("https://www.myinstants.com/media/sounds/fail.mp3");
+        loseSound.play();
+
+        result.innerHTML = `
+        <h2 style="color:red">💀 LOST</h2>
+        <img src="https://placekitten.com/300/300" width="200">
+        <p class="fall">tmq đẹp trai đ c</p>
+        `;
+    }
+}
+</script>
+
+</body>
+</html>
